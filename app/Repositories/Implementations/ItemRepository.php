@@ -7,7 +7,7 @@ use App\Repositories\ItemRepositoryInterface;
 
 class ItemRepository implements ItemRepositoryInterface
 {
-    public function saveItems(array $items): void
+    public function save(array $items): void
     {
         foreach ($items as $item) {
             Item::updateOrCreate(
