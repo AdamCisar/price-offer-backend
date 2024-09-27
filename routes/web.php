@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Services\Scrappers\Scrapper;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [Scrapper::class, 'importPrices']);
