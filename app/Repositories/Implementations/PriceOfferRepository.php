@@ -20,7 +20,12 @@ class PriceOfferRepository implements PriceOfferRepositoryInterface
 
     public function findById(int $id): array
     {
+        $priceOffer = PriceOffer::find($id);
 
-        return [];
+        if (!$priceOffer) {
+            return [];
+        }
+
+        return $priceOffer->toArray();
     }
 }

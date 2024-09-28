@@ -14,8 +14,13 @@ class PriceOfferService
         return $this->priceOfferRepository->getPriceOffers();
     }
 
-    public function createPriceOffer(Request $request): array
+    public function createOrUpdate(array $request): array
     {
-        return $this->priceOfferRepository->save($request->toArray());
+        return $this->priceOfferRepository->save($request);
+    }
+
+    public function getPriceOffer(int $id): array
+    {
+        return $this->priceOfferRepository->findById($id);
     }
 }

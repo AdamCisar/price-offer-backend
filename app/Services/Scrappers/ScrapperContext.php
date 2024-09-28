@@ -12,12 +12,12 @@ class ScrapperContext {
         return round($average, 2);
     }
 
-    public function getItemPrice(string $url): float 
+    public function getItemPrice(array $urls): float 
     {
         $itemPrices = [];
 
         foreach ($this->scrapers as $scraper) {
-            $itemPrices[] = $scraper->getItemPrice($url);
+            $itemPrices[] = $scraper->getItemPrice($urls);
         }
         
         return $this->getAveragePrice($itemPrices);

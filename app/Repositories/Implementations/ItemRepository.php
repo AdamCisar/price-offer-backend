@@ -7,16 +7,6 @@ use App\Repositories\ItemRepositoryInterface;
 
 class ItemRepository implements ItemRepositoryInterface
 {
-    public function save(array $items): void
-    {
-        foreach ($items as $item) {
-            Item::updateOrCreate(
-                ['id' => $item['id']], 
-                ['price' => $item['price']]
-            );
-        }
-    }
-
     public function getItemsForScrapper(): array
     {
         return Item::where('url', '!=', null)->get()->toArray();
@@ -30,5 +20,24 @@ class ItemRepository implements ItemRepositoryInterface
     public function findById(int $id): array
     {
         return [];
+    }
+
+    public function getSearchedItem(string $query): array
+    {
+        $item = Item::where('title', 'like', '%' . $query . '%')->first();
+
+        if (!$item) {
+            return [];
+        }
+
+        return $item->toArray();
+    }
+
+    public function save(array $item): int
+    {
+        $item = Item::updateOrCreate(['id' => $item['id']], 
+        $item);
+
+        return $item->id;
     }
 }

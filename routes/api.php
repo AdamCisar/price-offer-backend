@@ -1,9 +1,9 @@
 <?php
 
-use App\Services\PriceOfferService\ItemService;
-use App\Services\PriceOfferService\PriceOfferService;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\PriceOfferController;
+use App\Http\Controllers\UserController;
 use App\Services\Scrappers\Scrapper;
-use App\Services\User\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,8 +14,22 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/', [Scrapper::class, 'importPrices']);
 
-Route::get('/users/{id}', [UserService::class, 'getUserById']);
-Route::get('/price-offers', [PriceOfferService::class, 'getPriceOffers']);
-Route::post('/price-offers', [PriceOfferService::class, 'createPriceOffer']);
+Route::get('/users/{id}', [UserController::class, 'getUser']);
 
-Route::get('/items/search/{query}', [ItemService::class, 'getItemByQuery']);
+
+
+/** PRICE OFFERS */
+Route::group(['prefix' => 'price-offers'], function () {
+    Route::get('/', [PriceOfferController::class, 'listPriceOffers']);
+    Route::get('/{id}', [PriceOfferController::class, 'findById']);
+    Route::post('/', [PriceOfferController::class, 'save']);
+});
+
+
+
+
+/** ITEMS */
+Route::group(['prefix' => 'items'], function () {
+    Route::get('/search/{query}', [ItemController::class, 'findByQuery']);
+    Route::post('/', [ItemController::class, 'save']);
+});

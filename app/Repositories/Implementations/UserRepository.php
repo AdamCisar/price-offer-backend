@@ -11,4 +11,13 @@ class UserRepository implements UserRepositoryInterface
     {
         return User::find($id)->toArray();
     }
+
+    public function update(array $user, int $id): array
+    {
+        $user = User::find($id);
+
+        $user->update($user);
+
+        return $user->toArray();
+    }
 }

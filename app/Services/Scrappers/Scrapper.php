@@ -14,28 +14,23 @@ class Scrapper
         $this->scrapperContext = new ScrapperContext([new EmpiriaScrapper($this->guzzle)]);
     }
 
-    private function saveItems(array $items): void
-    {
-       $this->itemRepository->saveItems($items);
-    }
-
-    private function getItemsFromDb(): array
-    {
-        return $this->itemRepository->getItemsForScrapper();
-    }
-
     public function importPrices(): void
     {
-        $resultItems = [];
-        $items = $this->getItemsFromDb();
+        $items = $this->itemRepository->getItemsForScrapper();
 
         foreach ($items as $item) {
-            $resultItems[] = [
-                'id' => $item['id'],
-                'price' => $this->scrapperContext->getItemPrice($item['url']),
-            ];
-        }
+            $urls = json_decode($item['url'], true);
 
-        $this->saveItems($resultItems);
+            if (!$urls) {
+                continue;
+            }
+
+            $result = [
+                'id' => $item['id'],
+                'price' => $this->scrapperContext->getItemPrice($urls)
+            ];
+
+            $this->itemRepository->save($result);
+        }
     }
 }

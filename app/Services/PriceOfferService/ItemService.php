@@ -2,12 +2,19 @@
 
 namespace App\Services\PriceOfferService;
 
+use App\Repositories\Implementations\ItemRepository;
+
 class ItemService
 {
-    public function getItemByQuery(string $query): float
+    public function __construct(private ItemRepository $itemRepository) {}
+
+    public function getItemByQuery(string $query): array
     {
-        dd($query);
-        $item = Item::where('url', $url)->first();
-        return $item->price;
+        return $this->itemRepository->getSearchedItem($query);
+    }
+
+    public function save(array $item): int
+    {
+        return $this->itemRepository->save($item);
     }
 }
