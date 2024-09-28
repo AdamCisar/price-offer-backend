@@ -10,6 +10,6 @@ interface ItemRepositoryInterface
 
     public function findById(int $id): array;
 
-    public function getSearchedItem(string $query): array;
+    public function getSearchedItems(string $query): array;
 
 }

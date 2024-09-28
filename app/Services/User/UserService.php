@@ -13,9 +13,9 @@ class UserService
         return $this->userRepository->findById($id);
     }
 
-    public function update(array $user, int $id): array
+    public function update(array $user): array
     {
-        return $this->userRepository->update($user, $id);
+        return $this->userRepository->update($user);
     }
 
 }

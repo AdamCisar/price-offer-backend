@@ -16,7 +16,10 @@ Route::get('/', [Scrapper::class, 'importPrices']);
 
 
 /** USERS */
-Route::get('/users/{id}', [UserController::class, 'getUser']);
+Route::group(['prefix' => 'users'], function () {
+    Route::post('/', [UserController::class, 'update']);
+    Route::get('/{id}', [UserController::class, 'getUser']);
+});
 
 
 

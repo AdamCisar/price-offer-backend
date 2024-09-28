@@ -21,9 +21,9 @@ class UserController extends Controller
         return response()->json($user, 200);
     }
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(Request $request): JsonResponse
     {
-        $user = $this->userService->update($request->all(), $id);
+        $user = $this->userService->update($request->all());
 
         if (!$user) {
             return response()->json(['message' => 'User not found'], 404);

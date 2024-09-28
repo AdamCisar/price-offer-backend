@@ -2,15 +2,15 @@
 
 namespace App\Services\PriceOfferService;
 
-use App\Repositories\Implementations\ItemRepository;
+use App\Repositories\ItemRepositoryInterface;
 
 class ItemService
 {
-    public function __construct(private ItemRepository $itemRepository) {}
+    public function __construct(private ItemRepositoryInterface $itemRepository) {}
 
-    public function getItemByQuery(string $query): array
+    public function getItemsByQuery(string $query): array
     {
-        return $this->itemRepository->getSearchedItem($query);
+        return $this->itemRepository->getSearchedItems($query);
     }
 
     public function save(array $item): array

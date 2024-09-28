@@ -23,11 +23,7 @@ class ItemController extends Controller
 
     public function findByQuery(string $query): JsonResponse
     {
-        $item = $this->itemService->getItemByQuery($query);
-
-        if (!$item) {
-            return response()->json(['message' => 'Item not found!'], 404);
-        }
+        $item = $this->itemService->getItemsByQuery($query);
 
         return response()->json($item, 200);
     }

@@ -14,7 +14,7 @@ class PriceOfferRepository implements PriceOfferRepositoryInterface
 
     public function save(array $priceOffer): array
     {
-        return PriceOffer::create($priceOffer)->toArray();
+        return PriceOffer::updateOrCreate(['id' => $priceOffer['id'] ?? null], $priceOffer);
     }
 
 

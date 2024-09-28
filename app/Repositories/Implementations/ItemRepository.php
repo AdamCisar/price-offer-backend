@@ -28,15 +28,15 @@ class ItemRepository implements ItemRepositoryInterface
         return $item->toArray();
     }
 
-    public function getSearchedItem(string $query): array
+    public function getSearchedItems(string $query): array
     {
-        $item = Item::where('title', 'like', '%' . $query . '%')->first();
+        $items = Item::where('title', 'like', '%' . $query . '%')->get();
 
-        if (!$item) {
+        if (!$items) {
             return [];
         }
 
-        return $item->toArray();
+        return $items->toArray();
     }
 
     public function save(array $item): array

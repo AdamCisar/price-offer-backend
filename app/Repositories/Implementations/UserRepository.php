@@ -12,12 +12,9 @@ class UserRepository implements UserRepositoryInterface
         return User::find($id)->toArray();
     }
 
-    public function update(array $user, int $id): array
+    public function update(array $user): array
     {
-        $user = User::find($id);
-
-        $user->update($user);
-
+        $user = User::updateOrCreate(['id' => $user['id'] ?? null], $user);
         return $user->toArray();
     }
 }
