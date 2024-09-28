@@ -14,6 +14,8 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/', [Scrapper::class, 'importPrices']);
 
+
+/** USERS */
 Route::get('/users/{id}', [UserController::class, 'getUser']);
 
 

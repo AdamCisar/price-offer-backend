@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 interface ItemRepositoryInterface
 {
-    public function save(array $item): int;
+    public function save(array $item): array;
 
     public function getItemsForScrapper(): array;
 

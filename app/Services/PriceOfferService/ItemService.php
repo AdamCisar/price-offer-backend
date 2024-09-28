@@ -13,7 +13,7 @@ class ItemService
         return $this->itemRepository->getSearchedItem($query);
     }
 
-    public function save(array $item): int
+    public function save(array $item): array
     {
         return $this->itemRepository->save($item);
     }

@@ -19,7 +19,13 @@ class ItemRepository implements ItemRepositoryInterface
 
     public function findById(int $id): array
     {
-        return [];
+        $item = Item::find($id);
+
+        if (!$item) {
+            return [];
+        }
+
+        return $item->toArray();
     }
 
     public function getSearchedItem(string $query): array
@@ -33,11 +39,11 @@ class ItemRepository implements ItemRepositoryInterface
         return $item->toArray();
     }
 
-    public function save(array $item): int
+    public function save(array $item): array
     {
-        $item = Item::updateOrCreate(['id' => $item['id']], 
+        $item = Item::updateOrCreate(['id' => $item['id'] ?? null], 
         $item);
 
-        return $item->id;
+        return $item->toArray();
     }
 }
