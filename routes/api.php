@@ -18,19 +18,16 @@ Route::get('/', [Scrapper::class, 'importPrices']);
 /** USERS */
 Route::group(['prefix' => 'users'], function () {
     Route::post('/', [UserController::class, 'update']);
-    Route::get('/{id}', [UserController::class, 'getUser']);
+    Route::get('/{id}', [UserController::class, 'show']);
 });
-
 
 
 /** PRICE OFFERS */
 Route::group(['prefix' => 'price-offers'], function () {
-    Route::get('/', [PriceOfferController::class, 'listPriceOffers']);
-    Route::get('/{id}', [PriceOfferController::class, 'findById']);
+    Route::get('/', [PriceOfferController::class, 'index']);
+    Route::get('/{id}', [PriceOfferController::class, 'show']);
     Route::post('/', [PriceOfferController::class, 'save']);
 });
-
-
 
 
 /** ITEMS */

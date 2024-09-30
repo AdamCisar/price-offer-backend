@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\PriceOffer;
+
+use App\Dto\PriceOfferDto;
 
 interface PriceOfferRepositoryInterface
 {
@@ -8,5 +10,5 @@ interface PriceOfferRepositoryInterface
 
     public function getPriceOffers(): array;
 
-    public function findById(int $id): array;
+    public function findById(int $id): PriceOfferDto;
 }

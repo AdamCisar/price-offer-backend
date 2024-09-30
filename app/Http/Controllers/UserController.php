@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function __construct(private UserService $userService) {}
 
-    public function getUser(int $id): JsonResponse
+    public function show(int $id): JsonResponse
     {
         $user = $this->userService->getUserById($id);
 
