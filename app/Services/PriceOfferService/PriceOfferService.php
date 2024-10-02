@@ -38,6 +38,8 @@ class PriceOfferService
         }
         
         $result['id'] = $request['id'] ?? 0;
+        $result['title'] = $request['title'] ?? '';
+        $result['description'] = $request['description'] ?? '';
         
         if (empty($request['id'])) {
             $priceOffer = $this->priceOfferRepository->save($request);
