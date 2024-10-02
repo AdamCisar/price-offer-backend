@@ -14,7 +14,12 @@ class ItemRepository implements ItemRepositoryInterface
 
     public function getItems(): array
     {
-        return Item::all()->toArray();
+        $items = Item::all()->map(function ($item) {
+            $item->url = json_decode($item->url, true);
+            return $item;
+        })->toArray(); 
+
+        return $items;
     }
 
     public function findById(int $id): array

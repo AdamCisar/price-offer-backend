@@ -35,4 +35,5 @@ Route::group(['prefix' => 'price-offers'], function () {
 Route::group(['prefix' => 'items'], function () {
     Route::get('/search/{query}', [ItemController::class, 'findByQuery']);
     Route::post('/', [ItemController::class, 'save']);
+    Route::get('/', [ItemController::class, 'index']);
 });

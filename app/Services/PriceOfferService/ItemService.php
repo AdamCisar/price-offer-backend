@@ -8,6 +8,11 @@ class ItemService
 {
     public function __construct(private ItemRepositoryInterface $itemRepository) {}
 
+    public function getItems(): array
+    {
+        return $this->itemRepository->getItems();
+    }
+
     public function getItemsByQuery(string $query): array
     {
         return $this->itemRepository->getSearchedItems($query);

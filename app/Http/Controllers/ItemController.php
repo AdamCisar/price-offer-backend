@@ -10,6 +10,13 @@ class ItemController extends Controller
 {
     public function __construct(private ItemService $itemService) {}
 
+    public function index(): JsonResponse
+    {
+        $items = $this->itemService->getItems();
+
+        return response()->json($items, 200);
+    }
+
     public function save(Request $request): JsonResponse
     {
         $item = $this->itemService->save($request->toArray());

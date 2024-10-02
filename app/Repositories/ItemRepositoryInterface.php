@@ -12,4 +12,6 @@ interface ItemRepositoryInterface
 
     public function getSearchedItems(string $query): array;
 
+    public function getItems(): array;
+
 }
