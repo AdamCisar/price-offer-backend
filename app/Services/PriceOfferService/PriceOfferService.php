@@ -25,30 +25,31 @@ class PriceOfferService
 
     public function createOrUpdate(array $request): PriceOfferDto
     {
+        // create price offer
+        if (empty($request['id'])) {
+            $priceOffer = $this->priceOfferRepository->save($request);
+            return PriceOfferMapper::toDto($priceOffer);
+        }
+
+        // update price offer
         $priceOfferDto = PriceOfferMapper::toDto($request);
         $customer = $priceOfferDto->customer->toArray();
 
-        if (!empty($request['id'])) {
-            $this->customerRepository->save($customer);
-            $result['customer'] = $this->priceOfferCustomerRepository->save($customer, $request['id']);
-        }
+        // vytvorenie zakaznika vseobecne pre vyhladavanie
+        // $this->customerRepository->save($customer);
+
+        // vytvorenie zakaznika pre cenovu ponuku
+        $result['customer'] = $this->priceOfferCustomerRepository->save($customer, $request['id']);
 
         foreach ($priceOfferDto->items as $key => $priceOfferItem) {
             $result['items'][] = $this->priceOfferItemRepository->save($priceOfferItem->toArray(), $request['id']);
         }
         
-        $result['id'] = $request['id'] ?? 0;
+        $result['id'] = $request['id'];
         $result['title'] = $request['title'] ?? '';
         $result['description'] = $request['description'] ?? '';
-        
-        if (empty($request['id'])) {
-            $priceOffer = $this->priceOfferRepository->save($request);
-            $result = array_replace($result, $priceOffer);
-        }
 
-        $priceOfferResultDto = PriceOfferMapper::toDto($result);
-
-        return $priceOfferResultDto;
+        return PriceOfferMapper::toDto($result);
     }
 
     public function getPriceOffer(int $id): PriceOfferDto

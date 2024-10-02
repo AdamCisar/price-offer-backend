@@ -14,7 +14,6 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/', [Scrapper::class, 'importPrices']);
 
-
 /** USERS */
 Route::group(['prefix' => 'users'], function () {
     Route::post('/', [UserController::class, 'update']);
