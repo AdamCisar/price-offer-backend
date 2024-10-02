@@ -2,6 +2,7 @@
 
 namespace App\Services\PriceOfferService;
 
+use App\Dto\PriceOfferCustomerDto;
 use App\Dto\PriceOfferDto;
 use App\Mappers\PriceOfferMapper;
 use App\Repositories\CustomerRepositoryInterface;
@@ -60,5 +61,17 @@ class PriceOfferService
     public function delete(array $request): int
     {
         return $this->priceOfferRepository->delete($request['id']);
+    }
+
+    public function findCustomersByQuery(string $query): array
+    {
+        $customers = [];
+        $result = $this->priceOfferCustomerRepository->findCustomersByQuery($query);
+
+        foreach ($result as $customer) {
+            $customers[] = PriceOfferCustomerDto::create($customer['id'], $customer['name'], $customer['address'], $customer['city'], $customer['zip']);
+        }
+
+        return $customers;
     }
 }

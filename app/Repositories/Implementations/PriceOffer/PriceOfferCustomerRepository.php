@@ -12,7 +12,7 @@ class PriceOfferCustomerRepository implements PriceOfferCustomerRepositoryInterf
         $customer['price_offer_id'] = $priceOfferId;
         
         $customer = PriceOfferCustomer::updateOrCreate(
-            ['id' => $customer['id'] ?? null],
+            ['id' => $customer['id'] ?? null, 'price_offer_id' => $priceOfferId],
             $customer
         );
 
@@ -28,5 +28,14 @@ class PriceOfferCustomerRepository implements PriceOfferCustomerRepositoryInterf
         }
 
         return $customer->toArray();
+    }
+
+    public function findCustomersByQuery(string $query): array
+    {
+        return PriceOfferCustomer::where('name', 'like', '%' . $query . '%')
+            ->orWhere('address', 'like', '%' . $query . '%')
+            ->orWhere('city', 'like', '%' . $query . '%')
+            ->get()
+            ->toArray();
     }
 }

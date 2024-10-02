@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Traits\ArrayConvertibleTrait;
 
-class CustomerDto
+class PriceOfferCustomerDto
 {
     use ArrayConvertibleTrait;
     
@@ -22,7 +22,7 @@ class CustomerDto
             string $address,
             string $city,
             string $zip
-        ): CustomerDto 
+        ): PriceOfferCustomerDto 
     {
         return new self(
             $id, 

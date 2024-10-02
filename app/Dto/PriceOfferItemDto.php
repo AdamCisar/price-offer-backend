@@ -4,7 +4,7 @@ namespace App\Dto;
 
 use App\Traits\ArrayConvertibleTrait;
 
-class ItemDto
+class PriceOfferItemDto
 {
     use ArrayConvertibleTrait;
 
@@ -24,7 +24,7 @@ class ItemDto
             float $price,
             float $quantity,
             float $total
-        ): ItemDto 
+        ): PriceOfferItemDto 
     {
         return new self(
             $id, 

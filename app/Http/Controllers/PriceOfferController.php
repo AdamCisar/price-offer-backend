@@ -48,5 +48,12 @@ class PriceOfferController extends Controller
         }
 
         return response()->json(['message' => 'Price offer has been deleted!'], 200);
-    }                      
+    }
+    
+    public function findCustomersByQuery(string $query): JsonResponse
+    {
+        $customers = $this->priceOfferService->findCustomersByQuery($query);
+
+        return response()->json($customers, 200);
+    }
 }

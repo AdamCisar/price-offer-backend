@@ -2,8 +2,8 @@
 
 namespace App\Mappers;
 
-use App\Dto\CustomerDto;
-use App\Dto\ItemDto;
+use App\Dto\PriceOfferCustomerDto;
+use App\Dto\PriceOfferItemDto;
 use App\Dto\PriceOfferDTO;
 
 class PriceOfferMapper
@@ -15,7 +15,7 @@ class PriceOfferMapper
         $total = 0;
 
         foreach ($items as $item) {
-            $itemDtos[] = ItemDto::create(
+            $itemDtos[] = PriceOfferItemDto::create(
                 $item['item_id'] ?? $item['id'],
                 $item['title'],
                 $item['unit'] ?? '',
@@ -27,7 +27,7 @@ class PriceOfferMapper
         }; 
 
         $customer = $priceOffer['customer'] ?? [];
-        $customerDto = CustomerDto::create(
+        $customerDto = PriceOfferCustomerDto::create(
             $customer['id'] ?? 0, 
             $customer['name'] ?? '', 
             $customer['address'] ?? '', 
