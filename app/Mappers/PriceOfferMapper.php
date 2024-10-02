@@ -12,7 +12,8 @@ class PriceOfferMapper
     {
         $itemDtos = [];
         $items = $priceOffer['items'] ?? [];
-     
+        $total = 0;
+
         foreach ($items as $item) {
             $itemDtos[] = ItemDto::create(
                 $item['item_id'] ?? $item['id'],
@@ -22,6 +23,7 @@ class PriceOfferMapper
                 $item['quantity'],
                 $item['total'],
             ); 
+            $total += $item['total'];
         }; 
 
         $customer = $priceOffer['customer'] ?? [];
@@ -33,6 +35,6 @@ class PriceOfferMapper
             $customer['zip'] ?? ''
         );
 
-        return PriceOfferDTO::create($priceOffer['id'], $customerDto, $itemDtos);
+        return PriceOfferDTO::create($priceOffer['id'] ?? 0, $total, $customerDto, $itemDtos);
     }
 }

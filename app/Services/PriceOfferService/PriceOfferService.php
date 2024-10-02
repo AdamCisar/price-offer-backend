@@ -28,14 +28,22 @@ class PriceOfferService
         $priceOfferDto = PriceOfferMapper::toDto($request);
         $customer = $priceOfferDto->customer->toArray();
 
-        $this->customerRepository->save($customer);
-        $result['customer'] = $this->priceOfferCustomerRepository->save($customer, $request['id']);
+        if (!empty($request['id'])) {
+            $this->customerRepository->save($customer);
+            $result['customer'] = $this->priceOfferCustomerRepository->save($customer, $request['id']);
+        }
 
         foreach ($priceOfferDto->items as $key => $priceOfferItem) {
             $result['items'][] = $this->priceOfferItemRepository->save($priceOfferItem->toArray(), $request['id']);
         }
+        
+        $result['id'] = $request['id'] ?? 0;
+        
+        if (empty($request['id'])) {
+            $priceOffer = $this->priceOfferRepository->save($request);
+            $result = array_replace($result, $priceOffer);
+        }
 
-        $result['id'] = $request['id'];
         $priceOfferResultDto = PriceOfferMapper::toDto($result);
 
         return $priceOfferResultDto;
@@ -44,5 +52,10 @@ class PriceOfferService
     public function getPriceOffer(int $id): PriceOfferDto
     {
         return $this->priceOfferRepository->findById($id);
+    }
+
+    public function delete(array $request): int
+    {
+        return $this->priceOfferRepository->delete($request['id']);
     }
 }

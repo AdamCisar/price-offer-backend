@@ -27,6 +27,7 @@ Route::group(['prefix' => 'price-offers'], function () {
     Route::get('/', [PriceOfferController::class, 'index']);
     Route::get('/{id}', [PriceOfferController::class, 'show']);
     Route::post('/', [PriceOfferController::class, 'save']);
+    Route::delete('/', [PriceOfferController::class, 'destroy']);
 });
 
 

@@ -38,4 +38,15 @@ class PriceOfferController extends Controller
 
         return response()->json($priceOffer, 200);
     }
+
+    public function destroy(Request $request): JsonResponse
+    {
+        $isDeleted = $this->priceOfferService->delete($request->toArray());
+
+        if (!$isDeleted) {
+            return response()->json(['message' => 'Price offer has not been deleted!'], 400);
+        }
+
+        return response()->json(['message' => 'Price offer has been deleted!'], 200);
+    }                      
 }

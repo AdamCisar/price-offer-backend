@@ -21,11 +21,15 @@ class PriceOfferRepository implements PriceOfferRepositoryInterface
         return $priceOffer->toArray();
     }
 
-
     public function findById(int $id): PriceOfferDto
     {
         $priceOffer = PriceOffer::with(['items', 'customer'])->find($id);
 
         return PriceOfferMapper::toDto($priceOffer->toArray());
+    }
+
+    public function delete(array $idList): int
+    {
+        return PriceOffer::destroy($idList);
     }
 }

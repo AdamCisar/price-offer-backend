@@ -10,6 +10,7 @@ class PriceOfferDto
     
     private function __construct(
         public readonly int $id,
+        public readonly float $total,
         public readonly CustomerDto $customer,
         public readonly array $items,
     ) {}
@@ -23,7 +24,7 @@ class PriceOfferDto
      * @return PriceOfferDto The created PriceOfferDto instance.
      * @throws \InvalidArgumentException If any item is not an instance of ItemDto.
      */
-    public static function create(int $id, CustomerDto $customer, array $items): PriceOfferDto 
+    public static function create(int $id, float $total, CustomerDto $customer, array $items): PriceOfferDto 
     {
         foreach ($items as $item) {
             if (!$item instanceof ItemDto) {
@@ -31,7 +32,7 @@ class PriceOfferDto
             }
         }
         
-        return new self($id, $customer, $items);
+        return new self($id, $total, $customer, $items);
     }
 
 }
