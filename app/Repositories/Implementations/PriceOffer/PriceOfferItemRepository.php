@@ -42,4 +42,12 @@ class PriceOfferItemRepository implements PriceOfferItemRepositoryInterface
 
         return $item->toArray();
     }
+
+    /**
+     * @param int[] $idList The list of IDs to not be deleted.
+     */
+    public function deleteNotIncluded(array $idList): void
+    {
+        PriceOfferItem::whereNotIn('item_id', $idList)->delete();
+    }
 }

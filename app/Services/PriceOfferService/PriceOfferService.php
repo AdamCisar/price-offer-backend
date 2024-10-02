@@ -36,15 +36,15 @@ class PriceOfferService
         $priceOfferDto = PriceOfferMapper::toDto($request);
         $customer = $priceOfferDto->customer->toArray();
 
-        // vytvorenie zakaznika vseobecne pre vyhladavanie
-        // $this->customerRepository->save($customer);
-
-        // vytvorenie zakaznika pre cenovu ponuku
+        // vytvorenie alebo update zakaznika pre cenovu ponuku
         $result['customer'] = $this->priceOfferCustomerRepository->save($customer, $request['id']);
 
         foreach ($priceOfferDto->items as $key => $priceOfferItem) {
             $result['items'][] = $this->priceOfferItemRepository->save($priceOfferItem->toArray(), $request['id']);
         }
+
+        $itemIdList = array_column($request['items'], 'id');
+        $this->priceOfferItemRepository->deleteNotIncluded($itemIdList);
         
         $result['id'] = $request['id'];
         $result['title'] = $request['title'] ?? '';
