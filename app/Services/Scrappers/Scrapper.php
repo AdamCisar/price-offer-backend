@@ -3,15 +3,15 @@
 namespace App\Services\Scrappers;
 
 use App\Repositories\ItemRepositoryInterface;
-use App\Services\Scrappers\Eshops\EmpiriaScrapper;
 
 class Scrapper
 {
-    private ScrapperContext $scrapperContext;
+    protected ScrapperContext $scrapperContext;
 
-    public function __construct(private \GuzzleHttp\Client $guzzle, private ItemRepositoryInterface $itemRepository)
+    public function __construct(private ItemRepositoryInterface $itemRepository, private ScrapperContextLoader $scrapperContextLoader) 
     {
-        $this->scrapperContext = new ScrapperContext([new EmpiriaScrapper($this->guzzle)]);
+         $scrappers = $scrapperContextLoader->loadScrappers();
+         $this->scrapperContext = new ScrapperContext($scrappers);
     }
 
     public function importPrices(): void
@@ -19,18 +19,48 @@ class Scrapper
         $items = $this->itemRepository->getItemsForScrapper();
 
         foreach ($items as $item) {
-            $urls = json_decode($item['url'], true);
+            $urls = $this->parseJsonUrls($item['url']);
 
             if (!$urls) {
                 continue;
             }
 
+            $price = $this->scrapperContext->getItemPrice($urls);
+
+            if (empty($price)) {
+                continue;
+            }
+
             $result = [
                 'id' => $item['id'],
-                'price' => $this->scrapperContext->getItemPrice($urls)
+                'price' => $price
             ];
+
+            dump($result);
 
             $this->itemRepository->save($result);
         }
     }
+
+    private function parseJsonUrls(string $jsonUrls): array
+    {
+        $result = [];
+
+        if (empty($jsonUrls)) {
+            return $result;
+        }
+
+        $urls = json_decode($jsonUrls, true);
+
+        if (empty($urls)) {
+            return $result;
+        }
+
+        foreach ($urls as $url) {
+            $result[$url['shop']] = $url['url'];
+        }
+
+        return $result;
+    }
+
 }
