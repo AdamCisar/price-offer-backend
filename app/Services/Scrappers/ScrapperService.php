@@ -4,7 +4,7 @@ namespace App\Services\Scrappers;
 
 use App\Repositories\ItemRepositoryInterface;
 
-class Scrapper
+class ScrapperService
 {
     protected ScrapperContext $scrapperContext;
 
@@ -16,14 +16,15 @@ class Scrapper
 
     public function importPrices(): void
     {
-        $items = $this->itemRepository->getItemsForScrapper();
+        $items = $this->itemRepository->getItems();
 
         foreach ($items as $item) {
-            $urls = $this->parseJsonUrls($item['url']);
-
-            if (!$urls) {
+            
+            if (empty($item['url'])) {
                 continue;
             }
+            
+            $urls = $this->parseUrls($item['url']);
 
             $price = $this->scrapperContext->getItemPrice($urls);
 
@@ -36,21 +37,13 @@ class Scrapper
                 'price' => $price
             ];
 
-            dump($result);
-
             $this->itemRepository->save($result);
         }
     }
 
-    private function parseJsonUrls(string $jsonUrls): array
+    private function parseUrls(array $urls): array
     {
         $result = [];
-
-        if (empty($jsonUrls)) {
-            return $result;
-        }
-
-        $urls = json_decode($jsonUrls, true);
 
         if (empty($urls)) {
             return $result;

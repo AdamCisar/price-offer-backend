@@ -15,5 +15,6 @@ class Item extends Model
         'title',
         'unit',
         'price',
+        'url'
     ];
 }

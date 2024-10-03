@@ -2,8 +2,6 @@
 
 namespace App\Services\Scrappers;
 
-use App\Services\Scrappers\Eshops\InstalatershopScrapper;
-
 class ScrapperContext {
 
     public function __construct(private array $scrapers) {}
@@ -15,7 +13,7 @@ class ScrapperContext {
         }
 
         $average = array_sum($itemPrices) / count($itemPrices);
-        return round($average, 3);
+        return round($average, 2);
     }
 
     public function getItemPrice(array $urls): float 

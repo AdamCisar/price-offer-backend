@@ -4,18 +4,22 @@ namespace App\Repositories\Implementations;
 
 use App\Models\Item;
 use App\Repositories\ItemRepositoryInterface;
+use App\Services\Scrappers\ScrapperContextLoader;
 
 class ItemRepository implements ItemRepositoryInterface
 {
-    public function getItemsForScrapper(): array
-    {
-        return Item::where('url', '!=', null)->get()->toArray();
+    private array $scrapperClasses = [];
+
+    public function __construct(private ScrapperContextLoader $scrapperContextLoader) 
+    {  
+        $this->initializeScrapperClasses();
     }
 
     public function getItems(): array
     {
         $items = Item::all()->map(function ($item) {
-            $item->url = json_decode($item->url, true);
+            $urls = json_decode($item->url, true);
+            $item->url = array_replace($this->scrapperClasses, $urls ?? []);
             return $item;
         })->toArray(); 
 
@@ -50,5 +54,24 @@ class ItemRepository implements ItemRepositoryInterface
         $item);
 
         return $item->toArray();
+    }
+
+    private function initializeScrapperClasses(): void
+    {
+        $classes = $this->scrapperContextLoader->getScrapperClasses();
+
+        if (!$classes) {
+            return;
+        }
+
+        foreach ($classes as $class) {
+            $filename = basename($class); 
+            $shop = str_replace('.php', '', str_replace('Scrapper', '', $filename)); 
+            $shop = strtolower($shop); 
+            $this->scrapperClasses[] = [
+                'shop' => $shop,
+                'url' => ''
+            ];
+        }
     }
 }

@@ -16,10 +16,10 @@ class ScrapperContextLoader
 
     public function loadScrappers()
     {
-        $folderPath = __DIR__ . '/Eshops/';
         $scrappers = [];
+        $classes = $this->getScrapperClasses();
 
-        foreach (glob($folderPath . '*.php') as $file) {
+        foreach ($classes as $file) {
             $className = basename($file, '.php');
 
             $fullClassName = "App\\Services\\Scrappers\\Eshops\\" . $className;
@@ -30,5 +30,17 @@ class ScrapperContextLoader
         }
 
         return $scrappers;
+    }
+
+    public function getScrapperClasses(): array
+    {
+        $folderPath = __DIR__ . '/Eshops/';
+        $classes = glob($folderPath . '*.php');
+
+        if (!$classes) {
+            return [];
+        }
+
+        return $classes;
     }
 }

@@ -3,7 +3,7 @@
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PriceOfferController;
 use App\Http\Controllers\UserController;
-use App\Services\Scrappers\Scrapper;
+use App\Services\Scrappers\ScrapperService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -12,7 +12,7 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::get('/', [Scrapper::class, 'importPrices']);
+Route::get('/', [ScrapperService::class, 'importPrices']);
 
 /** USERS */
 Route::group(['prefix' => 'users'], function () {
