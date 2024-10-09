@@ -1,16 +1,18 @@
 <?php
 
-use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PriceOfferController;
 use App\Http\Controllers\UserController;
 use App\Services\Scrappers\ScrapperService;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::middleware('auth:api')->group(function () {
+    
+    Route::post('/logout', [AuthController::class, 'logout']);
+
     Route::get('/', [ScrapperService::class, 'importPrices']);
 
     /** USERS */

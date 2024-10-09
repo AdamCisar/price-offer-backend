@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
-class LoginController extends Controller
+class AuthController extends Controller
 {
     public function login(Request $request)
     {
@@ -37,7 +36,7 @@ class LoginController extends Controller
         return response()->json([
             'status'=> 'success',
             'user'=> $user,
-            'authorisation'=> [
+            'auth'=> [
                 'token' => $token,
                 'type' => 'bearer'
             ]
