@@ -24,5 +24,6 @@ class PriceOffer extends Model
     protected $fillable = [
         'title',
         'description',
+        'user_id',
     ];
 }

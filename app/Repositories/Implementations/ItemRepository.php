@@ -66,7 +66,7 @@ class ItemRepository implements ItemRepositoryInterface
 
         foreach ($classes as $class) {
             $filename = basename($class); 
-            $shop = str_replace('.php', '', str_replace('Scrapper', '', $filename)); 
+            $shop = str_replace('Scrapper.php', '', $filename); 
             $shop = strtolower($shop); 
             $this->scrapperClasses[] = [
                 'shop' => $shop,
