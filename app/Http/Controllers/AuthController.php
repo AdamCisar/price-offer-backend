@@ -35,7 +35,7 @@ class AuthController extends Controller
         $user = Auth::user();
         return response()->json([
             'status'=> 'success',
-            'user'=> $user,
+            'userId'=> $user->id,
             'auth'=> [
                 'token' => $token,
                 'type' => 'bearer'
@@ -45,7 +45,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::guard('web')->logout();
+        Auth::guard('api')->logout();
         return response()->json(['message' => 'Logged out successfully']);
     }
 }
