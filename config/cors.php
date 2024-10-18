@@ -19,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['https://ponuka.cisarvkp.sk', 'https://ponuka.netlify.app'],
+    'allowed_origins' => ['https://ponuka.cisarvkp.sk', 'https://ponuka.netlify.app', 'http://localhost:3000'],
 
     'allowed_origins_patterns' => [],
 

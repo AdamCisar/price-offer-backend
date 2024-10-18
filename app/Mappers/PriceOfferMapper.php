@@ -4,11 +4,11 @@ namespace App\Mappers;
 
 use App\Dto\PriceOfferCustomerDto;
 use App\Dto\PriceOfferItemDto;
-use App\Dto\PriceOfferDTO;
+use App\Dto\PriceOfferDto;
 
 class PriceOfferMapper
 {
-    public static function toDto(array $priceOffer): PriceOfferDTO
+    public static function toDto(array $priceOffer): PriceOfferDto
     {
         $itemDtos = [];
         $items = $priceOffer['items'] ?? [];
@@ -35,6 +35,6 @@ class PriceOfferMapper
             $customer['zip'] ?? ''
         );
 
-        return PriceOfferDTO::create($priceOffer['id'] ?? 0, $priceOffer['title'] ?? '', $priceOffer['description'] ?? '', $total, $customerDto, $itemDtos);
+        return PriceOfferDto::create($priceOffer['id'] ?? 0, $priceOffer['title'] ?? '', $priceOffer['description'] ?? '', $total, $customerDto, $itemDtos);
     }
 }
