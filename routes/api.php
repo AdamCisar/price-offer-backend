@@ -13,7 +13,7 @@ Route::middleware('auth:api')->group(function () {
     
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/', [ScrapperService::class, 'importPrices']);
+    // Route::get('/', [ScrapperService::class, 'importPrices']);
 
     /** USERS */
     Route::group(['prefix' => 'users'], function () {
