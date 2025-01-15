@@ -5,6 +5,7 @@ namespace App\Services\PriceOfferService;
 use App\Dto\PriceOfferCustomerDto;
 use App\Dto\PriceOfferDto;
 use App\Mappers\PriceOfferMapper;
+use App\Models\PriceOffer\PriceOfferItem;
 use App\Repositories\CustomerRepositoryInterface;
 use App\Repositories\PriceOffer\PriceOfferCustomerRepositoryInterface;
 use App\Repositories\PriceOffer\PriceOfferItemRepositoryInterface;
@@ -29,6 +30,8 @@ class PriceOfferService
         // create price offer
         if (empty($request['id'])) {
             $priceOffer = $this->priceOfferRepository->save($request);
+            $this->duplicatePriceOffer($request['duplicateFromId'] ?? 0, $priceOffer['id']);
+
             return PriceOfferMapper::toDto($priceOffer);
         }
 
@@ -51,6 +54,15 @@ class PriceOfferService
         $result['description'] = $request['description'] ?? '';
 
         return PriceOfferMapper::toDto($result);
+    }
+
+    public function duplicatePriceOffer(int $fromPriceOfferId, int $toPriceOfferId): void
+    {
+        if (!$toPriceOfferId) {
+            return;
+        }
+        
+        $this->priceOfferItemRepository->duplicate($fromPriceOfferId, $toPriceOfferId);
     }
 
     public function getPriceOffer(int $id): PriceOfferDto

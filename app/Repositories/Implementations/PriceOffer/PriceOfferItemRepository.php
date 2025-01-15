@@ -50,4 +50,15 @@ class PriceOfferItemRepository implements PriceOfferItemRepositoryInterface
     {
         PriceOfferItem::whereNotIn('item_id', $idList)->delete();
     }
+
+    public function duplicate(int $fromPriceOfferId, int $toPriceOfferId): void
+    {
+        $itemsToDuplicate = PriceOfferItem::where('price_offer_id', $fromPriceOfferId)->get();
+
+        foreach ($itemsToDuplicate as $item) {
+            $duplicate = $item->replicate();
+            $duplicate->price_offer_id = $toPriceOfferId;
+            $duplicate->save();
+        }
+    }
 }

@@ -12,4 +12,5 @@ interface PriceOfferItemRepositoryInterface
 
     public function deleteNotIncluded(array $idList): void;
 
+    public function duplicate(int $fromPriceOfferId, int $toPriceOfferId): void;
 }
