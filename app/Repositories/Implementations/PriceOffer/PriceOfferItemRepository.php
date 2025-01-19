@@ -37,7 +37,7 @@ class PriceOfferItemRepository implements PriceOfferItemRepositoryInterface
     public function save(array $item, int $priceOfferId): array
     {
         $item['price_offer_id'] = $priceOfferId;
-        $item = PriceOfferItem::updateOrCreate(['item_id' => $item['id'] ?? null], 
+        $item = PriceOfferItem::updateOrCreate(['item_id' => $item['id'] ?? null, 'price_offer_id' => $priceOfferId], 
         $item);
 
         return $item->toArray();
