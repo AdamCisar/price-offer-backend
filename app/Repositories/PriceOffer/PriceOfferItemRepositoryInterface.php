@@ -10,7 +10,7 @@ interface PriceOfferItemRepositoryInterface
 
     public function getSearchedItems(string $query): array;
 
-    public function deleteNotIncluded(array $idList): void;
+    public function deleteNotIncluded(array $idList, int $priceOfferId): void;
 
     public function duplicate(int $fromPriceOfferId, int $toPriceOfferId): void;
 }

@@ -37,18 +37,20 @@ class PriceOfferItemRepository implements PriceOfferItemRepositoryInterface
     public function save(array $item, int $priceOfferId): array
     {
         $item['price_offer_id'] = $priceOfferId;
-        $item = PriceOfferItem::updateOrCreate(['item_id' => $item['id'] ?? null, 'price_offer_id' => $priceOfferId], 
+        $item = PriceOfferItem::updateOrCreate(['id' => $item['id'] ?? null], 
         $item);
 
         return $item->toArray();
     }
 
     /**
-     * @param int[] $idList The list of IDs to not be deleted.
+     * @param int[] $idList The list of IDs not to be deleted.
      */
-    public function deleteNotIncluded(array $idList): void
+    public function deleteNotIncluded(array $idList, int $priceOfferId): void
     {
-        PriceOfferItem::whereNotIn('item_id', $idList)->delete();
+        PriceOfferItem::whereNotIn('id', $idList)
+        ->where('price_offer_id', $priceOfferId)
+        ->delete();
     }
 
     public function duplicate(int $fromPriceOfferId, int $toPriceOfferId): void

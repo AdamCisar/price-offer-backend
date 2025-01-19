@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Implementations;
 
+use App\Mappers\PriceOfferItemMapper;
 use App\Models\Item;
 use App\Repositories\ItemRepositoryInterface;
 use App\Services\Scrappers\ScrapperContextLoader;
@@ -39,13 +40,16 @@ class ItemRepository implements ItemRepositoryInterface
 
     public function getSearchedItems(string $query): array
     {
-        $items = Item::where('title', 'like', '%' . $query . '%')->get();
+        $items = Item::where('title', 'like', '%' . $query . '%')->select(['id as item_id', 'title', 'unit', 'price'])
+        ->get();
 
         if (!$items) {
             return [];
         }
 
-        return $items->toArray();
+        [$itemDtos, $total] = PriceOfferItemMapper::toDto($items->toArray());
+
+        return $itemDtos; 
     }
 
     public function save(array $item): array

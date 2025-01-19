@@ -10,22 +10,9 @@ class PriceOfferMapper
 {
     public static function toDto(array $priceOffer): PriceOfferDto
     {
-        $itemDtos = [];
         $items = $priceOffer['items'] ?? [];
-        $total = 0;
 
-        foreach ($items as $item) {
-            $itemDtos[] = PriceOfferItemDto::create(
-                $item['item_id'] ?? $item['id'],
-                $item['title'],
-                $item['unit'] ?? '',
-                $item['price'],
-                $item['quantity'],
-                $item['total'],
-            ); 
-            $total += $item['total'];
-        }; 
-
+        [$itemDtos, $total] = PriceOfferItemMapper::toDto($items);
         $customer = $priceOffer['customer'] ?? [];
         $customerDto = PriceOfferCustomerDto::create(
             $customer['id'] ?? 0, 

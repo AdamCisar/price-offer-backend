@@ -46,8 +46,8 @@ class PriceOfferService
             $result['items'][] = $this->priceOfferItemRepository->save($priceOfferItem->toArray(), $request['id']);
         }
 
-        $itemIdList = array_column($request['items'], 'id');
-        $this->priceOfferItemRepository->deleteNotIncluded($itemIdList);
+        $itemIdList = array_column($result['items'], 'id');
+        $this->priceOfferItemRepository->deleteNotIncluded($itemIdList, $request['id']);
         
         $result['id'] = $request['id'];
         $result['title'] = $request['title'] ?? '';
