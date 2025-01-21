@@ -60,6 +60,11 @@ class ItemRepository implements ItemRepositoryInterface
         return $item->toArray();
     }
 
+    public function delete(array $idList): int
+    {
+        return Item::whereIn('id', $idList)->delete();
+    }
+
     private function initializeScrapperClasses(): void
     {
         $classes = $this->scrapperContextLoader->getScrapperClasses();

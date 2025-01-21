@@ -12,4 +12,5 @@ interface ItemRepositoryInterface
 
     public function getItems(): array;
 
+    public function delete(array $idList): int;
 }

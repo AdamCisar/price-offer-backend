@@ -22,4 +22,9 @@ class ItemService
     {
         return $this->itemRepository->save($item);
     }
+
+    public function delete(array $item): bool
+    {
+        return $this->itemRepository->delete($item['id']);
+    }
 }

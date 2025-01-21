@@ -35,5 +35,6 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/search/{query}', [ItemController::class, 'findByQuery']);
         Route::post('/', [ItemController::class, 'save']);
         Route::get('/', [ItemController::class, 'index']);
+        Route::delete('/', [ItemController::class, 'destroy']);
     });
 });
