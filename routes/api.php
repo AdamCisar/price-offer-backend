@@ -12,13 +12,14 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/refresh', [AuthController::class, 'refresh']);
 
     // Route::get('/', [ScrapperService::class, 'importPrices']);
 
     /** USERS */
-    Route::group(['prefix' => 'users'], function () {
+    Route::group(['prefix' => 'user'], function () {
         Route::post('/', [UserController::class, 'update']);
-        Route::get('/{id}', [UserController::class, 'show']);
+        Route::get('/', [UserController::class, 'show']);
     });
 
     /** PRICE OFFERS */
