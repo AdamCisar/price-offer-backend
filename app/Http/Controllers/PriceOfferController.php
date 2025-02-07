@@ -30,7 +30,13 @@ class PriceOfferController extends Controller
 
     public function save(Request $request): JsonResponse
     {
-        $priceOffer = $this->priceOfferService->createOrUpdate($request->toArray());
+        $request = $request->all();
+        
+        if (empty($request)) {
+            return response()->json(['message' => 'Price offer not created!'], 400);
+        };
+
+        $priceOffer = $this->priceOfferService->createOrUpdate($request);
 
         if (!$priceOffer) {
             return response()->json(['message' => 'Price offer has not been created or updated!'], 400);
