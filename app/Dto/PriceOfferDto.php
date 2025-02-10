@@ -13,6 +13,7 @@ class PriceOfferDto
         public readonly string $title,
         public readonly string $description,
         public readonly float $total,
+        public readonly bool $is_vat,
         public readonly PriceOfferCustomerDto $customer,
         public readonly array $items,
     ) {}
@@ -26,7 +27,7 @@ class PriceOfferDto
      * @return PriceOfferDto The created PriceOfferDto instance.
      * @throws \InvalidArgumentException If any item is not an instance of ItemDto.
      */
-    public static function create(int $id, string $title, string $description, float $total, PriceOfferCustomerDto $customer, array $items): PriceOfferDto 
+    public static function create(int $id, string $title, string $description, float $total, bool $is_vat, PriceOfferCustomerDto $customer, array $items): PriceOfferDto 
     {
         foreach ($items as $item) {
             if (!$item instanceof PriceOfferItemDto) {
@@ -34,7 +35,7 @@ class PriceOfferDto
             }
         }
         
-        return new self($id, $title, $description, $total, $customer, $items);
+        return new self($id, $title, $description, $total, $is_vat, $customer, $items);
     }
 
 }
