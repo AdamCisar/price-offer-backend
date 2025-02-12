@@ -33,13 +33,30 @@ class PriceOfferController extends Controller
         $request = $request->all();
         
         if (empty($request)) {
-            return response()->json(['message' => 'Price offer not created!'], 400);
+            return response()->json(['message' => 'Price offer has not been created!'], 400);
         };
 
         $priceOffer = $this->priceOfferService->createOrUpdate($request);
 
         if (!$priceOffer) {
             return response()->json(['message' => 'Price offer has not been created or updated!'], 400);
+        }
+
+        return response()->json($priceOffer, 200);
+    }
+
+    public function updatePriceOfferDetails(Request $request): JsonResponse
+    {
+        $request = $request->all();
+        
+        if (empty($request)) {
+            return response()->json(['message' => 'Price offer details has not been updated!'], 400);
+        };
+
+        $priceOffer = $this->priceOfferService->updatePriceOfferDetails($request);
+
+        if (!$priceOffer) {
+            return response()->json(['message' => 'Price offer details has not been updated!'], 400);
         }
 
         return response()->json($priceOffer, 200);

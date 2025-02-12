@@ -27,15 +27,14 @@ class PriceOfferService
 
     public function createOrUpdate(array $request): PriceOfferDto
     {
-        // create price offer
-        if (empty($request['id'])) {
-            $priceOffer = $this->priceOfferRepository->save($request);
-            $this->duplicatePriceOffer($request['duplicateFromId'] ?? 0, $priceOffer['id']);
+        $priceOffer = $this->priceOfferRepository->save($request);
+        $this->duplicatePriceOffer($request['duplicateFromId'] ?? 0, $priceOffer['id']);
 
-            return PriceOfferMapper::toDto($priceOffer);
-        }
+        return PriceOfferMapper::toDto($priceOffer);
+    }
 
-        // update price offer
+    public function updatePriceOfferDetails(array $request): PriceOfferDto
+    {
         $priceOfferDto = PriceOfferMapper::toDto($request);
         $customer = $priceOfferDto->customer->toArray();
 
@@ -58,7 +57,7 @@ class PriceOfferService
 
     public function duplicatePriceOffer(int $fromPriceOfferId, int $toPriceOfferId): void
     {
-        if (!$toPriceOfferId) {
+        if (!$fromPriceOfferId || !$toPriceOfferId) {
             return;
         }
         

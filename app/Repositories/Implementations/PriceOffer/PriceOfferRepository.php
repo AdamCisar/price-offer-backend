@@ -22,7 +22,7 @@ class PriceOfferRepository implements PriceOfferRepositoryInterface
                 'id' => $priceOffer['id'] ?? null, 
                 'user_id' => Auth::id()
             ], 
-            $priceOffer);
+            $priceOffer)->refresh();
 
         return $priceOffer->toArray();
     }

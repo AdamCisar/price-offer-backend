@@ -27,6 +27,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('/', [PriceOfferController::class, 'index']);
         Route::get('/{id}', [PriceOfferController::class, 'show']);
         Route::post('/', [PriceOfferController::class, 'save']);
+        Route::post('/details', [PriceOfferController::class, 'updatePriceOfferDetails']);
         Route::delete('/', [PriceOfferController::class, 'destroy']);
         Route::get('customers/search/{query}', [PriceOfferController::class, 'findCustomersByQuery']);
     });
