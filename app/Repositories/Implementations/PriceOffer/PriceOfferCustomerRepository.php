@@ -12,7 +12,7 @@ class PriceOfferCustomerRepository implements PriceOfferCustomerRepositoryInterf
         $customer['price_offer_id'] = $priceOfferId;
         
         $customer = PriceOfferCustomer::updateOrCreate(
-            ['id' => $customer['id'] ?? null, 'price_offer_id' => $priceOfferId],
+            ['price_offer_id' => $priceOfferId],
             $customer
         );
 
