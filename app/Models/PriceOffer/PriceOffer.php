@@ -26,5 +26,6 @@ class PriceOffer extends Model
         'description',
         'user_id',
         'is_vat',
+        'notes'
     ];
 }
