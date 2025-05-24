@@ -24,5 +24,6 @@ class PriceOfferItem extends Model
         'quantity',
         'price',
         'total',
+        'ordering',
     ];
 }

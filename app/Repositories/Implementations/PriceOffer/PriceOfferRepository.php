@@ -29,8 +29,14 @@ class PriceOfferRepository implements PriceOfferRepositoryInterface
 
     public function findById(int $id): PriceOfferDto
     {
-        $priceOffer = PriceOffer::with(['items', 'customer'])
-            ->where('user_id', Auth::id())->find($id);
+        $priceOffer = PriceOffer::with([
+            'items' => function ($query) {
+                $query->orderBy('ordering', 'asc');
+            },
+            'customer'
+        ])
+        ->where('user_id', Auth::id())
+        ->find($id);
 
         return PriceOfferMapper::toDto($priceOffer->toArray());
     }

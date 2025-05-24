@@ -21,6 +21,7 @@ class PriceOfferItemMapper
                 $item['price'],
                 $item['quantity'] ?? 1,
                 $item['total'] ?? $item['price'],
+                $item['ordering'] ?? 0
             ); 
             $total += $item['total'] ?? $item['price'];
         }; 

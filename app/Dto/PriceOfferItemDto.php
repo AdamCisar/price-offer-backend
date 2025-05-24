@@ -16,6 +16,7 @@ class PriceOfferItemDto
         public readonly float $price,
         public readonly float $quantity,
         public readonly float $total,
+        public readonly int $ordering
     ) {}
 
     public static function create(
@@ -25,7 +26,8 @@ class PriceOfferItemDto
             string $unit,
             float $price,
             float $quantity,
-            float $total
+            float $total,
+            int $ordering
         ): PriceOfferItemDto 
     {
         return new self(
@@ -35,7 +37,8 @@ class PriceOfferItemDto
             $unit,
             $price,
             $quantity,
-            $total
+            $total,
+            $ordering
         );
     }
 
