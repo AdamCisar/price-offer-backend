@@ -10,9 +10,9 @@ class PriceOfferController extends Controller
 {
     public function __construct(private PriceOfferService $priceOfferService) {}
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $priceOffers = $this->priceOfferService->getPriceOffers();
+        $priceOffers = $this->priceOfferService->getPriceOffers($request->get('offset') ?? 0);
 
         return response()->json($priceOffers, 200);
     }

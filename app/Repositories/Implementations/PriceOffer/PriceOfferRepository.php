@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\Auth;
 
 class PriceOfferRepository implements PriceOfferRepositoryInterface
 {
-    public function getPriceOffers(): array
+    public function getPriceOffers(int $offset): array
     {
-        return PriceOffer::where('user_id', Auth::id())->get()->toArray();
+        return [
+            'priceOffers' => PriceOffer::where('user_id', Auth::id())->orderBy('created_at', 'desc')->limit(21)->offset($offset)->get()->toArray(),
+            'count' => PriceOffer::where('user_id', Auth::id())->count()
+        ];
     }
 
     public function save(array $priceOffer): array

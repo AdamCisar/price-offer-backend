@@ -20,9 +20,9 @@ class PriceOfferService
         private PriceOfferCustomerRepositoryInterface $priceOfferCustomerRepository
         ) {}
 
-    public function getPriceOffers(): array
+    public function getPriceOffers(int $offset): array
     {
-        return $this->priceOfferRepository->getPriceOffers();
+        return $this->priceOfferRepository->getPriceOffers($offset);
     }
 
     public function createOrUpdate(array $request): PriceOfferDto
