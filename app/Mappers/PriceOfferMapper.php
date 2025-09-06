@@ -22,6 +22,16 @@ class PriceOfferMapper
             $customer['zip'] ?? ''
         );
 
-        return PriceOfferDto::create($priceOffer['id'] ?? 0, $priceOffer['title'] ?? '', $priceOffer['description'] ?? '', $total, $priceOffer['is_vat'], $priceOffer['notes'] ?? '', $customerDto, $itemDtos);
+        return PriceOfferDto::create(
+            $priceOffer['id'] ?? 0, 
+            $priceOffer['title'] ?? '', 
+            $priceOffer['description'] ?? '', 
+            $total,
+            $priceOffer['created_at'] ?? '',
+            $priceOffer['is_vat'], 
+            $priceOffer['notes'] ?? '', 
+            $customerDto, 
+            $itemDtos
+        );
     }
 }
