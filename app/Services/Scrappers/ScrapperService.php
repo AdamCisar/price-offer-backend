@@ -41,8 +41,8 @@ class ScrapperService
         }
     }
 
-    private function parseUrls(array $urls): array
-    {
+    private function parseUrls(array $urls): array 
+{
         $result = [];
 
         if (empty($urls)) {
@@ -55,5 +55,4 @@ class ScrapperService
 
         return $result;
     }
-
 }

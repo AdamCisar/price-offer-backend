@@ -13,6 +13,7 @@ class ScrapperContext {
         }
 
         $average = array_sum($itemPrices) / count($itemPrices);
+        
         return round($average, 2);
     }
 

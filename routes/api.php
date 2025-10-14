@@ -4,7 +4,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\PriceOfferController;
 use App\Http\Controllers\UserController;
-use App\Services\Scrappers\ScrapperService;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -38,5 +37,7 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/', [ItemController::class, 'save']);
         Route::get('/', [ItemController::class, 'index']);
         Route::delete('/', [ItemController::class, 'destroy']);
+
+        Route::post('/update-prices', [ItemController::class, 'updatePrices']);
     });
 });
