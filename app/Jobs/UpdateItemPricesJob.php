@@ -23,6 +23,13 @@ class UpdateItemPricesJob implements ShouldQueue
      */
     public function handle(): void
     {
+        $lock = Cache::restoreLock('update-prices', $this->owner);
+
+        if (empty($this->data['item_ids'])) {
+            $lock->release();
+            return;
+        }
+
         $totalSteps = count($this->data['item_ids']);
 
         foreach ($this->data['item_ids'] as $index => $itemId) {
@@ -36,6 +43,6 @@ class UpdateItemPricesJob implements ShouldQueue
             ]);
         }
 
-        Cache::restoreLock('update-prices', $this->owner)->release();
+        $lock->release();
     }
 }
