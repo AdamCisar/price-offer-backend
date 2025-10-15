@@ -14,9 +14,9 @@ class ItemPriceUpdated
     /**
      * Create a new event instance.
      */
-    public function __construct(private readonly int $percentage)
+    public function __construct(private readonly int $itemId, private readonly array $data)
     {
-        $this->pushToBeams($percentage);
+        $this->pushToBeams($itemId, $data);
     }
 
     /**
@@ -36,7 +36,7 @@ class ItemPriceUpdated
         return 'UpdateItemPrice';
     }
 
-    private function pushToBeams(int $percentage): void
+    private function pushToBeams(int $itemId, array $data): void
     {
         $instanceId = env('PUSHER_BEAMS_INSTANCE_ID');
         $secretKey  = env('PUSHER_BEAMS_SECRET_KEY');
@@ -48,8 +48,14 @@ class ItemPriceUpdated
             'interests' => ['item-price-update'],
             'web' => [
                 'notification' => [
-                    'title' => 'item-price-update',
-                    'body' => "$percentage",
+                    'title' => 'Item price updated',
+                    'body' => "Updated to {$data['percentage']}%",
+                ],
+                'data' => [
+                    'type' => 'item-price-update',
+                    'item_id' => $itemId,
+                    'percentage' => $data['percentage'],
+                    'price_offer_id' => $data['price_offer_id'],
                 ],
             ],
         ]);

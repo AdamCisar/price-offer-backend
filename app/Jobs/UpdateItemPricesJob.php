@@ -25,12 +25,15 @@ class UpdateItemPricesJob implements ShouldQueue
     {
         $totalSteps = count($this->data['item_ids']);
 
-        foreach ($this->data['item_ids'] as $index => $item) {
+        foreach ($this->data['item_ids'] as $index => $itemId) {
             sleep(1);
 
             $percentage = intval((($index + 1) / $totalSteps) * 100);
 
-            new ItemPriceUpdated($percentage);
+            new ItemPriceUpdated($itemId, [
+                'percentage' => $percentage,
+                'price_offer_id' => $this->data['price_offer_id']
+            ]);
         }
 
         Cache::restoreLock('update-prices', $this->owner)->release();
