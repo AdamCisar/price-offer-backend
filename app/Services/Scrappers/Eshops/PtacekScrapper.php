@@ -2,9 +2,9 @@
 
 namespace App\Services\Scrappers\Eshops;
 
+use App\Exceptions\PtacekScrapperException;
 use App\Services\Scrappers\ScrapperInterface;
 use GuzzleHttp\Client;
-use PhpParser\Error;
 use Symfony\Component\DomCrawler\Crawler;
 use GuzzleHttp\Cookie\CookieJar;
 
@@ -47,7 +47,7 @@ class PtacekScrapper implements ScrapperInterface
             if (str_contains(
                 (new Crawler($response->getBody()->getContents()))->filter('title')->first()->text(), 'Prihlásenie')
             ) {
-                throw new Error('Nesprávne prihlasovacie udaje!');
+                throw PtacekScrapperException::invalidCredentials();
             }
 
             return (new self($this->guzzle, $this->jar))->getItemPrice($urls);

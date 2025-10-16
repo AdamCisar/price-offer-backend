@@ -59,7 +59,7 @@ class ItemController extends Controller
         UpdateItemPricesJob::dispatch(
             $request->toArray(), 
             $lock->owner(),
-            app(PtacekScrapper::class)
+            PtacekScrapper::class
         );
 
         return response()->json(['message' => 'Price update has been started!'], 200);

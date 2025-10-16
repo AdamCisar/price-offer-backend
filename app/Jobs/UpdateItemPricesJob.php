@@ -3,12 +3,14 @@
 namespace App\Jobs;
 
 use App\Events\ItemPriceUpdated;
+use App\Exceptions\PtacekScrapperException;
 use App\Models\Item;
 use App\Models\PriceOffer\PriceOfferItem;
-use App\Services\Scrappers\ScrapperInterface;
+use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class UpdateItemPricesJob implements ShouldQueue
 {
@@ -20,7 +22,7 @@ class UpdateItemPricesJob implements ShouldQueue
     public function __construct(
         private readonly array $data, 
         private readonly string $owner,
-        private readonly ScrapperInterface $scrapper
+        private readonly string $scrapperClassName
     ) {}
 
     /**
@@ -35,6 +37,7 @@ class UpdateItemPricesJob implements ShouldQueue
             return;
         }
 
+        $scrapper = app($this->scrapperClassName);
         $totalSteps = count($this->data['item_ids']);
         $urls = Item::whereIn('id', $this->data['item_ids'])
             ->pluck('url', 'id')->toArray();
@@ -44,7 +47,25 @@ class UpdateItemPricesJob implements ShouldQueue
                 continue;
             }
 
-            $price = $this->scrapper->getItemPrice($urls[$itemId]);
+            try {
+                $price = $scrapper->getItemPrice($urls[$itemId]);
+            } catch (PtacekScrapperException $e) {
+                new ItemPriceUpdated($itemId, [
+                    'price_offer_id' => $this->data['price_offer_id'],
+                    'error' => $e->getMessage(),
+                ]);
+
+                $lock->release();
+                throw new Exception($e->getMessage());
+            } catch (Throwable $e) {
+                new ItemPriceUpdated($itemId, [
+                    'price_offer_id' => $this->data['price_offer_id'],
+                    'error' => "Neznáma chyba!",
+                ]);
+
+                $lock->release();
+                throw new Exception($e->getMessage());
+            }
 
             $this->savePrice($price, $itemId, $this->data['price_offer_id']);
 

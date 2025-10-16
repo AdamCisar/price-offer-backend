@@ -49,14 +49,15 @@ class ItemPriceUpdated
             'web' => [
                 'notification' => [
                     'title' => 'Item price updated',
-                    'body' => "Updated to {$data['percentage']}%",
+                    'body' => $data['error'] ?? "Updated to {$data['percentage']}%",
                 ],
                 'data' => [
                     'type' => 'item-price-update',
                     'item_id' => $itemId,
-                    'percentage' => $data['percentage'],
+                    'percentage' => $data['percentage'] ?? 0,
                     'price_offer_id' => $data['price_offer_id'],
-                    'price' => $data['price'],
+                    'price' => $data['price'] ?? 0,
+                    'error' => $data['error'] ?? '',
                 ],
             ],
         ]);
