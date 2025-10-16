@@ -19,7 +19,7 @@ class ItemRepository implements ItemRepositoryInterface
     public function getItems(): array
     {
         $items = Item::all()->map(function ($item) {
-            $urls = json_decode($item->url, true);
+            $urls = $item->url;
             $item->url = array_replace($this->scrapperClasses, $urls ?? []);
             return $item;
         })->toArray(); 

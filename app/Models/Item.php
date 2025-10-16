@@ -17,4 +17,8 @@ class Item extends Model
         'price',
         'url'
     ];
+
+    protected $casts = [
+        'url' => 'array',
+    ];
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\UpdateItemPricesJob;
 use App\Services\PriceOfferService\ItemService;
+use App\Services\Scrappers\Eshops\PtacekScrapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -55,7 +56,11 @@ class ItemController extends Controller
             return response()->json(['message' => 'There is another update in progress!'], 409);    
         }
 
-        UpdateItemPricesJob::dispatch($request->toArray(), $lock->owner());
+        UpdateItemPricesJob::dispatch(
+            $request->toArray(), 
+            $lock->owner(),
+            app(PtacekScrapper::class)
+        );
 
         return response()->json(['message' => 'Price update has been started!'], 200);
     }
