@@ -56,6 +56,7 @@ class ItemPriceUpdated
                     'item_id' => $itemId,
                     'percentage' => $data['percentage'],
                     'price_offer_id' => $data['price_offer_id'],
+                    'price' => $data['price'],
                 ],
             ],
         ]);
