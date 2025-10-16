@@ -32,8 +32,8 @@ class PtacekScrapper implements ScrapperInterface
 
             $this->guzzle->post('https://eshop.ptacek.sk/prihlaseni', [
             'form_params' => [
-                    'login' => 'michal.cisar.ml@gmail.com',
-                    'password' => 'CisarVkp13',
+                    'login' => env('PTACEK_USERNAME'),
+                    'password' => env('PTACEK_PASSWORD'),
                     'send' => 'true',
                     '__VIEWSTATE' => $viewState,
                     '__VIEWSTATEGENERATOR' => $viewStateGen,
