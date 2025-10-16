@@ -14,7 +14,7 @@ class PtacekScrapper implements ScrapperInterface
     public function getItemPrice(array $urls): float
     {
         $price = 0;
-        $url = $urls['ptacek']['url'];
+        $url = data_get(collect($urls)->firstWhere('shop', 'ptacek'), 'url', '');
 
         if (empty($url)) {
             return $price;
