@@ -4,6 +4,7 @@ namespace App\Services\Scrappers\Eshops;
 
 use App\Services\Scrappers\ScrapperInterface;
 use GuzzleHttp\Client;
+use PhpParser\Error;
 use Symfony\Component\DomCrawler\Crawler;
 use GuzzleHttp\Cookie\CookieJar;
 
@@ -30,7 +31,7 @@ class PtacekScrapper implements ScrapperInterface
             $viewStateGen = $crawler->filter('input[name="__VIEWSTATEGENERATOR"]')->attr('value');
             $eventValidation = $crawler->filter('input[name="__EVENTVALIDATION"]')->attr('value');
 
-            $this->guzzle->post('https://eshop.ptacek.sk/prihlaseni', [
+            $response = $this->guzzle->post('https://eshop.ptacek.sk/prihlaseni', [
             'form_params' => [
                     'login' => env('PTACEK_USERNAME'),
                     'password' => env('PTACEK_PASSWORD'),
@@ -42,6 +43,12 @@ class PtacekScrapper implements ScrapperInterface
                 'cookies' => $this->jar,
                 'allow_redirects' => true,
             ]);
+
+            if (str_contains(
+                (new Crawler($response->getBody()->getContents()))->filter('title')->first()->text(), 'Prihlásenie')
+            ) {
+                throw new Error('Nesprávne prihlasovacie udaje!');
+            }
 
             return (new self($this->guzzle, $this->jar))->getItemPrice($urls);
         }
