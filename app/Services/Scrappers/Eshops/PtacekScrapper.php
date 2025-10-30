@@ -10,7 +10,12 @@ use GuzzleHttp\Cookie\CookieJar;
 
 class PtacekScrapper implements ScrapperInterface
 {
-    public function __construct(private Client $guzzle, private ?CookieJar $jar = null) {}
+    public function __construct(
+        private Client $guzzle, 
+        private ?CookieJar $jar = null,
+        private ?string $email = null,
+        private ?string $password = null,
+    ) {}
     
     public function getItemPrice(array $urls): float
     {
@@ -33,8 +38,8 @@ class PtacekScrapper implements ScrapperInterface
 
             $response = $this->guzzle->post('https://eshop.ptacek.sk/prihlaseni', [
             'form_params' => [
-                    'login' => env('PTACEK_USERNAME'),
-                    'password' => env('PTACEK_PASSWORD'),
+                    'login' => $this->email,
+                    'password' => $this->password,
                     'send' => 'true',
                     '__VIEWSTATE' => $viewState,
                     '__VIEWSTATEGENERATOR' => $viewStateGen,

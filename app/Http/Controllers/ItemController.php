@@ -8,6 +8,7 @@ use App\Services\Scrappers\Eshops\PtacekScrapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
 
 class ItemController extends Controller
 {
@@ -57,7 +58,12 @@ class ItemController extends Controller
         }
 
         UpdateItemPricesJob::dispatch(
-            $request->toArray(), 
+            [
+                ...$request->toArray(), 
+                ...[
+                    'email' => Crypt::encryptString($request->input('email')), 
+                    'password' => Crypt::encryptString($request->input('password'))
+                ]],
             $lock->owner(),
             PtacekScrapper::class
         );

@@ -10,6 +10,8 @@ use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class UpdateItemPricesJob implements ShouldQueue
@@ -34,16 +36,27 @@ class UpdateItemPricesJob implements ShouldQueue
 
         if (empty($this->data['item_ids'])) {
             $lock->release();
-            return;
+            throw new Exception('Chýbajú položky!');
         }
 
-        $scrapper = app($this->scrapperClassName);
+        $scrapper = app($this->scrapperClassName, [
+            'email' => Crypt::decryptString($this->data['email']),
+            'password' => Crypt::decryptString($this->data['password']),
+        ]);
+
         $totalSteps = count($this->data['item_ids']);
-        $urls = Item::whereIn('id', $this->data['item_ids'])
-            ->pluck('url', 'id')->toArray();
+
+        $items = Item::whereIn('id', $this->data['item_ids'])->get();
+        $urls = $items->pluck('url', 'id')->toArray();
 
         foreach ($this->data['item_ids'] as $index => $itemId) {
+            $itemName = $items->where('id', $itemId)->first()->title;
+
             if (empty($urls[$itemId])) {
+                new ItemPriceUpdated($itemId, [
+                    'price_offer_id' => $this->data['price_offer_id'],
+                    'error' => "Nie je nastavená URL položku {$itemName}!",
+                ]);
                 continue;
             }
 
@@ -81,8 +94,8 @@ class UpdateItemPricesJob implements ShouldQueue
 
     private function savePrice(float $price, int $itemId, int $priceOfferId): void
     {
-        Item::where('id', $itemId)
-            ->update(['price' => $price]);
+        // Item::where('id', $itemId)
+        //     ->update(['price' => $price]);
 
         PriceOfferItem::where('price_offer_id', $priceOfferId)
             ->where('item_id', $itemId)
