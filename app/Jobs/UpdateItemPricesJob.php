@@ -46,7 +46,7 @@ class UpdateItemPricesJob implements ShouldQueue
 
         $totalSteps = count($this->data['item_ids']);
 
-        $items = Item::fromRaw('items')
+        $items = Item::withoutGlobalScopes()
                 ->whereIn('id', $this->data['item_ids'])
                 ->where('user_id', $this->data['user_id'])->get();
         $urls = $items->pluck('url', 'id')->toArray();
