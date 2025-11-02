@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\UpdateItemPricesJob;
 use App\Services\PriceOfferService\ItemService;
+use App\Services\Scrappers\Eshops\PtacekScrapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
 
 class ItemController extends Controller
 {
@@ -43,5 +47,27 @@ class ItemController extends Controller
         $item = $this->itemService->getItemsByQuery($query);
 
         return response()->json($item, 200);
+    }
+
+    public function updatePrices(Request $request): JsonResponse
+    {
+        $lock = Cache::lock('update-prices');
+
+        if (!$lock->get()) {
+            return response()->json(['message' => 'There is another update in progress!'], 409);    
+        }
+
+        UpdateItemPricesJob::dispatch(
+            [
+                ...$request->toArray(), 
+                ...[
+                    'email' => Crypt::encryptString($request->input('email')), 
+                    'password' => Crypt::encryptString($request->input('password'))
+                ]],
+            $lock->owner(),
+            PtacekScrapper::class
+        );
+
+        return response()->json(['message' => 'Price update has been started!'], 200);
     }
 }

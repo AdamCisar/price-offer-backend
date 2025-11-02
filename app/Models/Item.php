@@ -20,6 +20,10 @@ class Item extends Model
         'url'
     ];
 
+    protected $casts = [
+        'url' => 'array',
+    ];
+    
     protected static function booted(): void
     {
         static::addGlobalScope(new ItemScope);

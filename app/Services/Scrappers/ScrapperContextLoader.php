@@ -35,7 +35,8 @@ class ScrapperContextLoader
     public function getScrapperClasses(): array
     {
         $folderPath = __DIR__ . '/Eshops/';
-        $classes = glob($folderPath . '*.php');
+        // $classes = glob($folderPath . '*.php');
+        $classes = glob($folderPath . 'Ptacek*.php');
 
         if (!$classes) {
             return [];
