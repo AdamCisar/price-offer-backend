@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\ItemScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Item extends Model
 {
@@ -21,4 +23,23 @@ class Item extends Model
     protected $casts = [
         'url' => 'array',
     ];
+    
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new ItemScope);
+
+        static::creating(function ($item) {
+            $item->user_id = Auth::id();
+        });
+
+        static::updating(function ($item) {
+            $item->user_id = Auth::id();
+        });
+
+        static::deleting(function ($item) {
+            if ($item->user_id !== Auth::id()) {
+                return false;
+            }
+        });
+    }
 }
