@@ -7,6 +7,7 @@ use App\Services\PriceOfferService\ItemService;
 use App\Services\Scrappers\Eshops\PtacekScrapper;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 
@@ -62,7 +63,8 @@ class ItemController extends Controller
                 ...$request->toArray(), 
                 ...[
                     'email' => Crypt::encryptString($request->input('email')), 
-                    'password' => Crypt::encryptString($request->input('password'))
+                    'password' => Crypt::encryptString($request->input('password')),
+                    'user_id' => Auth::user()->id
                 ]],
             $lock->owner(),
             PtacekScrapper::class
