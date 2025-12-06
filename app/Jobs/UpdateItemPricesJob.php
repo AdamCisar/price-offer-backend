@@ -10,8 +10,6 @@ use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class UpdateItemPricesJob implements ShouldQueue
@@ -39,9 +37,10 @@ class UpdateItemPricesJob implements ShouldQueue
             throw new Exception('Chýbajú položky!');
         }
 
+        $account = config("accounts.{$this->scrapperClassName}.{$this->data['user_id']}");
         $scrapper = app($this->scrapperClassName, [
-            'email' => Crypt::decryptString($this->data['email']),
-            'password' => Crypt::decryptString($this->data['password']),
+            'email' => $account['email'] ?? '',
+            'password' => $account['password'] ?? '',
         ]);
 
         $totalSteps = count($this->data['item_ids']);
