@@ -11,8 +11,9 @@ class ItemRepository implements ItemRepositoryInterface
 {
     private array $scrapperClasses = [];
 
-    public function __construct(private ScrapperContextLoader $scrapperContextLoader) 
-    {  
+    public function __construct(
+        private ScrapperContextLoader $scrapperContextLoader
+    ) {
         $this->initializeScrapperClasses();
     }
 
@@ -22,7 +23,7 @@ class ItemRepository implements ItemRepositoryInterface
             $urls = $item->url;
             $item->url = array_replace($this->scrapperClasses, $urls ?? []);
             return $item;
-        })->toArray(); 
+        })->toArray();
 
         return $items;
     }
@@ -40,8 +41,9 @@ class ItemRepository implements ItemRepositoryInterface
 
     public function getSearchedItems(string $query): array
     {
-        $items = Item::where('title', 'like', '%' . $query . '%')->select(['id as item_id', 'title', 'unit', 'price'])
-        ->get();
+        $items = Item::where('title', 'like', '%' . $query . '%')
+            ->select(['id as item_id', 'title', 'unit', 'price'])
+            ->get();
 
         if (!$items) {
             return [];
@@ -49,15 +51,21 @@ class ItemRepository implements ItemRepositoryInterface
 
         [$itemDtos, $total] = PriceOfferItemMapper::toDto($items->toArray());
 
-        return $itemDtos; 
+        return $itemDtos;
     }
 
     public function save(array $item): array
     {
-        $item = Item::updateOrCreate(['id' => $item['id'] ?? null], 
-        $item);
+        if (array_is_list($item)) {
+            return array_map(function ($i) {
+                return Item::updateOrCreate(
+                    isset($i['id']) ? ['id' => $i['id']] : ['title' => $i['title']],
+                    $i
+                )->toArray();
+            }, $item);
+        }
 
-        return $item->toArray();
+        return Item::updateOrCreate(['id' => $item['id'] ?? null], $item)->toArray();
     }
 
     public function delete(array $idList): int
@@ -74,9 +82,9 @@ class ItemRepository implements ItemRepositoryInterface
         }
 
         foreach ($classes as $class) {
-            $filename = basename($class); 
-            $shop = str_replace('Scrapper.php', '', $filename); 
-            $shop = strtolower($shop); 
+            $filename = basename($class);
+            $shop = str_replace('Scrapper.php', '', $filename);
+            $shop = strtolower($shop);
             $this->scrapperClasses[] = [
                 'shop' => $shop,
                 'url' => ''
